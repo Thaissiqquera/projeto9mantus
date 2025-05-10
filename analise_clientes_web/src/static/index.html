@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Clientes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Painel de Análise de Clientes</h1>
+    </header>
+
+    <main>
+        <section id="clusterizacao-clientes">
+            <h2>Clusterização de Clientes</h2>
+            <div class="grafico-container">
+                <img src="/static/plots/clusters_clientes.png" alt="Gráfico de Clusters de Clientes">
+            </div>
+            <div id="diagnostico-clusters" class="diagnostico-container">
+                <h3>Diagnóstico por Cluster:</h3>
+                <!-- O conteúdo do diagnóstico será preenchido pelo backend -->
+            </div>
+        </section>
+
+        <section id="preferencia-campanhas">
+            <h2>Análise de Preferência por Campanhas</h2>
+            <div class="grafico-container">
+                <img src="/static/plots/gasto_medio_por_cliente_campanha.png" alt="Gráfico de Gasto Médio por Cliente por Campanha">
+            </div>
+            <div class="grafico-container">
+                <img src="/static/plots/roi_estimado_campanha.png" alt="Gráfico de ROI Estimado por Campanha">
+            </div>
+            <div id="sugestoes-campanhas" class="sugestoes-container">
+                <h3>Sugestões de Melhorias:</h3>
+                <!-- O conteúdo das sugestões será preenchido pelo backend -->
+            </div>
+        </section>
+
+        <section id="impacto-campanhas">
+            <h2>Impacto das Campanhas no Total Gasto</h2>
+            <div class="grafico-container">
+                <img src="/static/plots/impacto_campanhas_total_gasto.png" alt="Gráfico de Impacto das Campanhas no Total Gasto">
+            </div>
+            <div id="coeficientes-regressao-campanhas" class="coeficientes-container">
+                <h3>Coeficientes da Regressão Linear (Campanhas):</h3>
+                <!-- O conteúdo dos coeficientes será preenchido pelo backend -->
+            </div>
+        </section>
+
+        <section id="previsao-gasto">
+            <h2>Previsão de Total Gasto vs. Real</h2>
+            <div class="grafico-container">
+                <img src="/static/plots/previsao_total_gasto_vs_real.png" alt="Gráfico de Previsão de Total Gasto vs. Real">
+            </div>
+             <div id="coeficientes-regressao-clientes" class="coeficientes-container">
+                <h3>Coeficientes da Regressão Linear (Clientes):</h3>
+                <!-- O conteúdo dos coeficientes será preenchido pelo backend -->
+            </div>
+        </section>
+
+        <section id="distribuicao-clv">
+            <h2>Distribuição do CLV por Segmento</h2>
+            <div class="grafico-container">
+                <img src="/static/plots/distribuicao_clv_segmento.png" alt="Gráfico de Distribuição do CLV por Segmento">
+            </div>
+        </section>
+
+        <section id="clientes-alto-gasto">
+            <h2>Clientes com Alto Gasto (>= R$60.000)</h2>
+            <div id="lista-clientes-alto-gasto" class="tabela-container">
+                <!-- A tabela de clientes será preenchida pelo backend -->
+            </div>
+            <div id="sugestoes-marketing-alto-gasto" class="sugestoes-container">
+                <h3>Sugestões de Marketing para Clientes de Alto Gasto:</h3>
+                <!-- O conteúdo das sugestões será preenchido pelo backend -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Desenvolvido por Manus IA</p>
+    </footer>
+
+    <script>
+        // Script para carregar dados dinamicamente do backend
+        async function fetchData(endpoint, elementId, isTable = false, tableHeaders = []) {
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                const container = document.getElementById(elementId);
+                
+                if (isTable) {
+                    let tableHTML = '<table><thead><tr>';
+                    tableHeaders.forEach(header => tableHTML += `<th>${header}</th>`);
+                    tableHTML += '</tr></thead><tbody>';
+                    data.forEach(row => {
+                        tableHTML += '<tr>';
+                        tableHeaders.forEach(header => tableHTML += `<td>${row[header.toLowerCase().replace(/ /g, '_')] || ''}</td>`);
+                        tableHTML += '</tr>';
+                    });
+                    tableHTML += '</tbody></table>';
+                    container.innerHTML = tableHTML;
+                } else if (Array.isArray(data)) {
+                    container.innerHTML = data.map(item => `<p>${item}</p>`).join('');
+                } else if (typeof data === 'object') {
+                    let content = '';
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                             if (typeof data[key] === 'object'){
+                                content += `<p><strong>${key}:</strong></p>`;
+                                for (const subKey in data[key]){
+                                    content += `<p style="margin-left: 20px;"><strong>${subKey}:</strong> ${data[key][subKey]}</p>`;
+                                }
+                             } else {
+                                content += `<p><strong>${key}:</strong> ${data[key]}</p>`;
+                             }
+                        }
+                    }
+                    container.innerHTML = content;
+                } else {
+                    container.innerHTML = `<p>${data}</p>`;
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                document.getElementById(elementId).innerHTML = '<p>Erro ao carregar dados.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData('/api/diagnostico_clusters', 'diagnostico-clusters');
+            fetchData('/api/sugestoes_campanhas', 'sugestoes-campanhas');
+            fetchData('/api/coeficientes_regressao_campanhas', 'coeficientes-regressao-campanhas');
+            fetchData('/api/coeficientes_regressao_clientes', 'coeficientes-regressao-clientes');
+            fetchData('/api/clientes_alto_gasto', 'lista-clientes-alto-gasto', true, ['Cliente ID', 'Nome Produto', 'Categoria Produto', 'Preco Unitario', 'Quantidade', 'Data Compra', 'Metodo Pagamento', 'Status Pedido', 'Endereco Entrega', 'Cidade Entrega', 'Estado Entrega', 'CEP Entrega', 'Pais Entrega', 'Idade', 'Renda Mensal', 'Genero', 'Tipo Cliente', 'Frequencia Compras', 'Total Gasto', 'Ultima Compra', 'Campanha', 'Cluster']);
+            fetchData('/api/sugestoes_marketing_alto_gasto', 'sugestoes-marketing-alto-gasto');
+        });
+    </script>
+</body>
+</html>

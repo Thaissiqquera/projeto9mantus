@@ -1,0 +1,150 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+section:last-child {
+    border-bottom: none;
+}
+
+h2 {
+    color: #333;
+    margin-top: 0;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.grafico-container {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.grafico-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.diagnostico-container, 
+.sugestoes-container, 
+.coeficientes-container, 
+.tabela-container {
+    padding: 15px;
+    background-color: #e9f5e9;
+    border-left: 5px solid #4CAF50;
+    margin-top: 15px;
+    font-size: 0.95rem;
+}
+
+.diagnostico-container h3, 
+.sugestoes-container h3, 
+.coeficientes-container h3 {
+    margin-top: 0;
+    color: #2e7d32;
+}
+
+.diagnostico-container p, 
+.sugestoes-container p, 
+.coeficientes-container p {
+    margin-bottom: 8px;
+}
+
+.tabela-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.tabela-container th, 
+.tabela-container td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.tabela-container th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.tabela-container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: #fff;
+    margin-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+    main {
+        padding: 15px;
+        margin: 15px;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
+    .grafico-container img {
+        max-height: 300px; /* Adjust as needed for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.2rem;
+    }
+    main {
+        padding: 10px;
+        margin: 10px;
+    }
+    h2 {
+        font-size: 1.1rem;
+    }
+    .tabela-container th, 
+    .tabela-container td {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+}
+
